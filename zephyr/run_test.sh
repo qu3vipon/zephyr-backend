@@ -1,2 +1,2 @@
 alembic upgrade head
-python -m pytest
+python -m pytest --cov="." --cov-report term:skip-covered
