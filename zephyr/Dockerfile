@@ -27,4 +27,4 @@ RUN poetry config virtualenvs.create false \
 # add app
 COPY . .
 
-CMD ["sh", "./config/app/fastapi.sh"]
+CMD ["sh", "./zephyr/run_server.sh"]

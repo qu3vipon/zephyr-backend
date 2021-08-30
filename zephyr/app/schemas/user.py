@@ -1,4 +1,6 @@
+from datetime import datetime
 from typing import Optional
+from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -17,3 +19,22 @@ class UserCreate(BaseModel):
 # Properties to receive via API on update
 class UserUpdate(UserBase):
     password: Optional[str] = None
+
+
+class UserInDBBase(BaseModel):
+    id: Optional[int] = None
+    uuid: UUID
+    username: str
+    password_hash: str
+    is_active: bool
+    is_superuser: bool
+    registered_at: datetime
+    unregistered_at: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True
+
+
+# Additional properties to return via API
+class User(UserInDBBase):
+    access_token = str

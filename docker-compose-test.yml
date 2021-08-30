@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: zephyr/Dockerfile.test
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8000:8000
+    expose:
+      - 8000
+    environment:
+      - ENV=test
+      - TESTING=1
+      - DB_SERVER=localhost:5432
+      - DB_USER=zephyr
+      - DB_PASSWORD=zephyr
+      - DB_NAME=db_test
+    depends_on:
+      - db
+  db:
+    image: library/postgres:12.8
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    restart: always
+    environment:
+      - POSTGRES_USER=zephyr
+      - POSTGRES_PASSWORD=zephyr
+      - POSTGRES_DB=db_test

@@ -2,7 +2,7 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
-from zephyr.app.core.security import get_password_hash
+from zephyr.app.core.security import get_password_hash, verify_password
 from zephyr.app.crud.base import CRUDBase
 from zephyr.app.models.user import User
 from zephyr.app.schemas import UserCreate, UserUpdate
@@ -21,6 +21,20 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.commit()
         db.refresh(db_obj)
         return db_obj
+
+    def authenticate(self, db: Session, *, username: str, password: str) -> Optional[User]:
+        user = self.get_by_username(db, username=username)
+        if not user:
+            return None
+        if not verify_password(password, user.password_hash):
+            return None
+        return user
+
+    def is_active(self, user: User) -> bool:
+        return user.is_active
+
+    def is_superuser(self, user: User) -> bool:
+        return user.is_superuser
 
 
 user = CRUDUser(User)
