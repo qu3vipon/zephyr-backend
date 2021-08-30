@@ -6,7 +6,7 @@ from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
-from zephyr.app import models, schemas, crud
+from zephyr.app import crud, models, schemas
 from zephyr.app.core import security
 from zephyr.app.core.config import settings
 from zephyr.app.db.session import SessionLocal
@@ -25,7 +25,7 @@ def get_db() -> Generator:
 
 
 def get_current_user(
-        db: Session = Depends(get_db), token: str = Depends(reusable_oauth2)
+    db: Session = Depends(get_db), token: str = Depends(reusable_oauth2)
 ) -> models.User:
     try:
         pay_load = jwt.decode(
@@ -44,7 +44,7 @@ def get_current_user(
 
 
 def get_current_active_user(
-        current_user: models.User = Depends(get_current_user),
+    current_user: models.User = Depends(get_current_user),
 ) -> models.User:
     if not crud.user.is_active(current_user):
         raise HTTPException(status_code=400, detail="Inactive user")

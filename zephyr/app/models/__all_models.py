@@ -1,2 +1,1 @@
-# noinspection PyUnresolvedReferences
-from zephyr.app.models import user
+from zephyr.app.models import user  # noqa

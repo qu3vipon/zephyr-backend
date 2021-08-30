@@ -1,2 +1,2 @@
-from .token import Token, TokenPayload
-from .user import UserCreate, UserUpdate, User
+from .token import Token, TokenPayload  # noqa
+from .user import User, UserCreate, UserUpdate  # noqa

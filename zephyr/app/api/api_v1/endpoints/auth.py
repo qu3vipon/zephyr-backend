@@ -5,18 +5,18 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from zephyr.app import schemas, crud
+from zephyr.app import crud, schemas
 from zephyr.app.api import deps
 from zephyr.app.core import security
 from zephyr.app.core.config import settings
-from zephyr.app.schemas.user import UserInDBBase, User
+from zephyr.app.schemas.user import User, UserInDBBase
 
 router = APIRouter()
 
 
 @router.post("/login/access-token", response_model=schemas.Token)
 def login_access_token(
-        db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
+    db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
 ) -> Any:
     """
     OAuth2 compatible token login, get an access token for future requests
@@ -39,13 +39,13 @@ def login_access_token(
 
 @router.post("/sign-up", response_model=schemas.User)
 def create_user(
-        *,
-        db: Session = Depends(deps.get_db),
-        user_in: schemas.UserCreate,
+    *,
+    db: Session = Depends(deps.get_db),
+    user_in: schemas.UserCreate,
 ) -> Any:
     """
-     Create new user.
-     """
+    Create new user.
+    """
     user = crud.user.get_by_username(db, username=user_in.username)
     if user:
         raise HTTPException(

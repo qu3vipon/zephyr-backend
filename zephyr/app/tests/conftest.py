@@ -1,10 +1,8 @@
-import os
-
 import pytest
 from starlette.testclient import TestClient
 
-from zephyr.app.main import app
 from zephyr.app.core.config import Settings, get_settings
+from zephyr.app.main import app
 
 
 def get_settings_override():

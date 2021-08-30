@@ -22,7 +22,9 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db.refresh(db_obj)
         return db_obj
 
-    def authenticate(self, db: Session, *, username: str, password: str) -> Optional[User]:
+    def authenticate(
+        self, db: Session, *, username: str, password: str
+    ) -> Optional[User]:
         user = self.get_by_username(db, username=username)
         if not user:
             return None
