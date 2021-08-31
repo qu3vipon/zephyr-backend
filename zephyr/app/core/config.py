@@ -15,14 +15,15 @@ class Settings(BaseSettings):
     DB_NAME: str = os.getenv("DB_NAME", "zephyr_dev")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "zephyr")
     DB_SERVER: str = os.getenv("DB_SERVER", "localhost")
-    DB_USER: str = os.getenv("DB_USER", "zephyr")
-    ENVIRONMENT: str = os.getenv("ENV", "dev")
-    SECRET_KEY: str = os.getenv("SECREY_KEY", "zephyr")
-    TESTING: bool = os.getenv("TESTING", 0)
 
     @property
     def DB_URL(self):  # noqa
         return f"postgresql://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_SERVER}/{self.DB_NAME}"
+
+    DB_USER: str = os.getenv("DB_USER", "zephyr")
+    ENVIRONMENT: str = os.getenv("ENV", "dev")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "zephyr")
+    TESTING: bool = os.getenv("TESTING", 0)
 
 
 @lru_cache()
