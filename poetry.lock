@@ -153,6 +153,14 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "contextlib2"
+version = "21.6.0"
+description = "Backports and enhancements for the contextlib module"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "coverage"
 version = "5.5"
 description = "Code coverage measurement for Python"
@@ -544,6 +552,17 @@ python-versions = ">=3.5, <4"
 pyasn1 = ">=0.1.3"
 
 [[package]]
+name = "schema"
+version = "0.7.4"
+description = "Simple data validation library"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+contextlib2 = ">=0.5.5"
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -661,7 +680,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "7439eadb352efa7fd9738873be051c29c6d4d91af2c683cb245d3b56d54abae2"
+content-hash = "c9b52bc0573f8c0522854262fe44eda8f0e71637a3f8da85e8f19af4cdf9a7a8"
 
 [metadata.files]
 alembic = [
@@ -770,6 +789,10 @@ click = [
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
+]
+contextlib2 = [
+    {file = "contextlib2-21.6.0-py2.py3-none-any.whl", hash = "sha256:3fbdb64466afd23abaf6c977627b75b6139a5a3e8ce38405c5b413aed7a0471f"},
+    {file = "contextlib2-21.6.0.tar.gz", hash = "sha256:ab1e2bfe1d01d968e1b7e8d9023bc51ef3509bba217bb730cee3827e1ee82869"},
 ]
 coverage = [
     {file = "coverage-5.5-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:b6d534e4b2ab35c9f93f46229363e17f63c53ad01330df9f2d6bd1187e5eaacf"},
@@ -1152,6 +1175,10 @@ requests = [
 rsa = [
     {file = "rsa-4.7.2-py3-none-any.whl", hash = "sha256:78f9a9bf4e7be0c5ded4583326e7461e3a3c5aae24073648b4bdfa797d78c9d2"},
     {file = "rsa-4.7.2.tar.gz", hash = "sha256:9d689e6ca1b3038bc82bf8d23e944b6b6037bc02301a574935b2dd946e0353b9"},
+]
+schema = [
+    {file = "schema-0.7.4-py2.py3-none-any.whl", hash = "sha256:cf97e4cd27e203ab6bb35968532de1ed8991bce542a646f0ff1d643629a4945d"},
+    {file = "schema-0.7.4.tar.gz", hash = "sha256:fbb6a52eb2d9facf292f233adcc6008cffd94343c63ccac9a1cb1f3e6de1db17"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},

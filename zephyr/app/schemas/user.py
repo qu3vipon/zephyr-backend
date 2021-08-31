@@ -31,9 +31,6 @@ class UserInDBBase(BaseModel):
     registered_at: datetime
     unregistered_at: Optional[datetime] = None
 
-    class Config:
-        orm_mode = True
-
 
 # Additional properties to return via API
 class UserOut(UserInDBBase):

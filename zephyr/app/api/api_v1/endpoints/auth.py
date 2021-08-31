@@ -52,6 +52,6 @@ def create_user(
     #         email_to=user_in.email, username=user_in.email, password=user_in.password
     #     )
 
-    user_data = user_in_db.as_dict()
-    user_data.update({"access_token": security.create_access_token(user_in_db.id)})
-    return user_data
+    user_out = user_in_db.as_dict()
+    user_out.update({"access_token": security.create_access_token(user_in_db.id)})
+    return user_out

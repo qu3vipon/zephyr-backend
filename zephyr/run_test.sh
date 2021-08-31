@@ -5,4 +5,4 @@ python -m flake8 ./zephyr/app
 echo "==================================== BLACK ===================================="
 python -m black ./zephyr/app --check
 echo "==================================== ISORT ===================================="
-python -m isort ./zephyr/app --check-only
+python -m isort ./zephyr/app
