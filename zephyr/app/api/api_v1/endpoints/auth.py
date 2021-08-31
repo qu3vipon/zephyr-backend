@@ -1,4 +1,3 @@
-from datetime import timedelta
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -8,8 +7,6 @@ from sqlalchemy.orm import Session
 from zephyr.app import crud, schemas
 from zephyr.app.api import deps
 from zephyr.app.core import security
-from zephyr.app.core.config import settings
-from zephyr.app.schemas.user import User, UserInDBBase
 
 router = APIRouter()
 
@@ -28,16 +25,13 @@ def login_access_token(
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     elif not crud.user.is_active(user):
         raise HTTPException(status_code=400, detail="Inactive user")
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return {
-        "access_token": security.create_access_token(
-            user.id, expires_delta=access_token_expires
-        ),
+        "access_token": security.create_access_token(user.id),
         "token_type": "bearer",
     }
 
 
-@router.post("/sign-up", response_model=schemas.User)
+@router.post("/sign-up", response_model=schemas.UserOut, status_code=201)
 def create_user(
     *,
     db: Session = Depends(deps.get_db),
@@ -46,26 +40,18 @@ def create_user(
     """
     Create new user.
     """
-    user = crud.user.get_by_username(db, username=user_in.username)
-    if user:
+    user_in_db = crud.user.get_by_username(db, username=user_in.username)
+    if user_in_db:
         raise HTTPException(
             status_code=400,
             detail="The user with this username already exists in the system.",
         )
-    user = crud.user.create(db, obj_in=user_in)
+    user_in_db = crud.user.create(db, obj_in=user_in)
     # if settings.EMAILS_ENABLED and user_in.email:
     #     send_new_account_email(
     #         email_to=user_in.email, username=user_in.email, password=user_in.password
     #     )
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    user_data = UserInDBBase.from_orm(user)
-    user_data.dict().update(
-        {
-            "access_token": security.create_access_token(
-                user.id, expires_delta=access_token_expires
-            )
-        }
-    )
-    # todo: add test
-    user_response = User(**user_data.dict())
-    return user_response
+
+    user_data = user_in_db.as_dict()
+    user_data.update({"access_token": security.create_access_token(user_in_db.id)})
+    return user_data

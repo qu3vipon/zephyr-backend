@@ -15,7 +15,7 @@ class TestUserAuthentication:
             json=self.user_data,
         )
 
-        assert response.status_code == 200
+        assert response.status_code == 201
 
     def test_login_access_token(self, test_app):
         response = test_app.post(

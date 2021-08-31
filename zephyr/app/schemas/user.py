@@ -36,5 +36,5 @@ class UserInDBBase(BaseModel):
 
 
 # Additional properties to return via API
-class User(UserInDBBase):
-    access_token = str
+class UserOut(UserInDBBase):
+    access_token: str
