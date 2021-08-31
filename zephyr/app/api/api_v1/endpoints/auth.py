@@ -1,12 +1,14 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from zephyr.app import crud, schemas
 from zephyr.app.api import deps
 from zephyr.app.core import security
+from zephyr.app.core.security import get_password_hash
+from zephyr.app.utils import verify_access_token
 
 router = APIRouter()
 
@@ -26,7 +28,7 @@ def login_access_token(
     elif not crud.user.is_active(user):
         raise HTTPException(status_code=400, detail="Inactive user")
     return {
-        "access_token": security.create_access_token(user.id),
+        "access_token": security.create_access_token(user.uuid),
         "token_type": "bearer",
     }
 
@@ -40,18 +42,44 @@ def create_user(
     """
     Create new user.
     """
-    user_in_db = crud.user.get_by_username(db, username=user_in.username)
-    if user_in_db:
+    user = crud.user.get_by_username(db, username=user_in.username)
+    if user:
         raise HTTPException(
             status_code=400,
             detail="The user with this username already exists in the system.",
         )
-    user_in_db = crud.user.create(db, obj_in=user_in)
+    user = crud.user.create(db, obj_in=user_in)
     # if settings.EMAILS_ENABLED and user_in.email:
     #     send_new_account_email(
     #         email_to=user_in.email, username=user_in.email, password=user_in.password
     #     )
 
-    user_out = user_in_db.as_dict()
-    user_out.update({"access_token": security.create_access_token(user_in_db.id)})
+    user_out = user.as_dict()
+    user_out.update({"access_token": security.create_access_token(user.uuid)})
     return user_out
+
+
+@router.post("/reset-password", response_model=schemas.Msg)
+def reset_password(
+    access_token: str = Body(...),
+    new_password: str = Body(...),
+    db: Session = Depends(deps.get_db),
+) -> Any:
+    """
+    Reset password
+    """
+    user_uuid = verify_access_token(access_token)
+    if not user_uuid:
+        raise HTTPException(status_code=400, detail="Invalid token")
+    user = crud.user.get_by_uuid(db, uuid=user_uuid)
+    if not user:
+        raise HTTPException(
+            status_code=404, detail="The user with this username does not exist."
+        )
+    elif not crud.user.is_active(user):
+        raise HTTPException(status_code=400, detail="Inactive user")
+    hashed_password = get_password_hash(new_password)
+    user.password_hash = hashed_password
+    db.add(user)
+    db.commit()
+    return {"msg": "Password updated successfully."}
