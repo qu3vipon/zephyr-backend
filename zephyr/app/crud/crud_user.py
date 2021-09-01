@@ -1,5 +1,4 @@
 from typing import Optional
-from uuid import UUID
 
 from sqlalchemy.orm import Session
 
@@ -12,9 +11,6 @@ from zephyr.app.schemas import UserCreate, UserUpdate
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def get_by_username(self, db: Session, *, username: str) -> Optional[User]:
         return db.query(User).filter(User.username == username).first()
-
-    def get_by_uuid(self, db: Session, *, uuid: UUID) -> Optional[UUID]:
-        return db.query(User).filter(User.uuid == uuid).first()
 
     def create(self, db: Session, *, obj_in: UserCreate) -> User:
         db_obj = User(

@@ -7,8 +7,7 @@ from sqlalchemy.orm import Session
 from zephyr.app import crud, schemas
 from zephyr.app.api import deps
 from zephyr.app.core import security
-from zephyr.app.core.security import get_password_hash
-from zephyr.app.utils import verify_access_token
+from zephyr.app.core.security import get_password_hash, verify_access_token
 
 router = APIRouter()
 
@@ -28,7 +27,7 @@ def login_access_token(
     elif not crud.user.is_active(user):
         raise HTTPException(status_code=400, detail="Inactive user")
     return {
-        "access_token": security.create_access_token(user.uuid),
+        "access_token": security.create_access_token(user.id),
         "token_type": "bearer",
     }
 
@@ -55,7 +54,7 @@ def create_user(
     #     )
 
     user_out = user.as_dict()
-    user_out.update({"access_token": security.create_access_token(user.uuid)})
+    user_out.update({"access_token": security.create_access_token(user.id)})
     return user_out
 
 
@@ -68,10 +67,10 @@ def reset_password(
     """
     Reset password
     """
-    user_uuid = verify_access_token(access_token)
-    if not user_uuid:
+    user_id = verify_access_token(access_token)
+    if not user_id:
         raise HTTPException(status_code=400, detail="Invalid token")
-    user = crud.user.get_by_uuid(db, uuid=user_uuid)
+    user = crud.user.get(db, id=user_id)
     if not user:
         raise HTTPException(
             status_code=404, detail="The user with this username does not exist."

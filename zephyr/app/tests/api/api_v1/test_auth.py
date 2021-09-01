@@ -34,7 +34,7 @@ class TestUserAuthentication:
         assert response.status_code == 201
         assert schema.is_valid(response.json())
 
-    def test_login_access_token(self, test_app, test_user):
+    def test_login_access_token(self, test_app):
         response = test_app.post(
             f"{self.url_prefix}/auth/login/access-token",
             data=self.new_user_body,
@@ -47,11 +47,10 @@ class TestUserAuthentication:
         )
 
         assert response.status_code == 200
-        schema.validate(response.json())
         assert schema.is_valid(response.json())
 
     def test_reset_password(self, test_app, test_user):
-        access_token = security.create_access_token(test_user.uuid)
+        access_token = security.create_access_token(test_user.id)
         reset_body = {
             "access_token": access_token,
             "new_password": "new_password",
@@ -60,6 +59,7 @@ class TestUserAuthentication:
             f"{self.url_prefix}/auth/reset-password", json=reset_body
         )
 
+        print(response.json())
         assert response.status_code == 200
         assert response.json()["msg"] == "Password updated successfully."
 
