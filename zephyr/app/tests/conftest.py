@@ -39,7 +39,7 @@ def test_app() -> Generator:
         yield test_client
 
 
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="session")
 def test_user_raw_password(db: Session) -> str:
     return "zephyr"
 
