@@ -7,6 +7,12 @@ Social Music Application built with FastAPI
 - Docker Compose
 - Poetry
 
+## Boilterplate
+```shell
+git clone https://github.com/qu3vipon/zephyr-backend.git
+git checkout tags/v1.0.0 -b <branch_name>
+```
+
 ## Local Development
 ### Environment Variables
 ```shell
