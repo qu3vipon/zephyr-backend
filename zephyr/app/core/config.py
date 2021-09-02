@@ -6,6 +6,10 @@ from pydantic import BaseSettings
 
 log = logging.getLogger("uvicorn")
 
+APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(APP_DIR)
+ROOT_DIR = os.path.dirname(PROJECT_DIR)
+
 
 class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60

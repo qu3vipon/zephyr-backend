@@ -1,4 +1,3 @@
-import logging
 from logging.config import fileConfig
 
 from alembic import context
@@ -31,8 +30,6 @@ from zephyr.app.models import __all_models  # noqa
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-log = logging.getLogger("alembic")
-
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
@@ -46,10 +43,8 @@ def run_migrations_offline():
     script output.
 
     """
-    db_url = settings.DB_URL
-    log.info(db_url)
     context.configure(
-        url=db_url,
+        url=settings.DB_URL,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -66,10 +61,8 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    db_url = settings.DB_URL
-    log.info(db_url)
     configuration = config.get_section(config.config_ini_section)
-    configuration["sqlalchemy.url"] = db_url
+    configuration["sqlalchemy.url"] = settings.DB_URL
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",
