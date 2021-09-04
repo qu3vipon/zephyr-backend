@@ -27,9 +27,9 @@ class TestUserCRUD:
         assert user.uuid == test_user.uuid
         assert jsonable_encoder(user) == jsonable_encoder(test_user)
 
-    def test_authenticate_user(self, db: Session, test_user, test_user_raw_password):
+    def test_authenticate_user(self, db: Session, test_user):
         authenticated_user = crud.user.authenticate(
-            db, username=test_user.username, password=test_user_raw_password
+            db, username=test_user.username, password="new_password"
         )
         assert authenticated_user
         assert authenticated_user.uuid == test_user.uuid

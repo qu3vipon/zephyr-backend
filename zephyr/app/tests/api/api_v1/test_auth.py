@@ -3,18 +3,18 @@ from schema import Or, Schema
 from zephyr.app.core import security
 from zephyr.app.core.config import settings
 
+URL_PREFIX = settings.API_V1_PREFIX
+
 
 class TestUserAuthentication:
     new_user_body = {
-        "username": "zephyr2",
-        "password": "zephyr2",
+        "username": "zephyr_auth",
+        "password": "zephyr_auth",
     }
-
-    url_prefix: str = settings.API_V1_PREFIX
 
     def test_sign_up(self, test_app):
         response = test_app.post(
-            f"{self.url_prefix}/auth/sign-up",
+            f"{URL_PREFIX}/auth/sign-up",
             json=self.new_user_body,
         )
         schema = Schema(
@@ -36,7 +36,7 @@ class TestUserAuthentication:
 
     def test_login_access_token(self, test_app):
         response = test_app.post(
-            f"{self.url_prefix}/auth/login/access-token",
+            f"{URL_PREFIX}/auth/login/access-token",
             data=self.new_user_body,
         )
         schema = Schema(
@@ -55,21 +55,18 @@ class TestUserAuthentication:
             "access_token": access_token,
             "new_password": "new_password",
         }
-        response = test_app.post(
-            f"{self.url_prefix}/auth/reset-password", json=reset_body
-        )
+        response = test_app.post(f"{URL_PREFIX}/auth/reset-password", json=reset_body)
 
-        print(response.json())
         assert response.status_code == 200
         assert response.json()["msg"] == "Password updated successfully."
 
-        login_body = {
+        login_request_body = {
             "username": test_user.username,
             "password": reset_body["new_password"],
         }
         response = test_app.post(
-            f"{self.url_prefix}/auth/login/access-token",
-            data=login_body,
+            f"{URL_PREFIX}/auth/login/access-token",
+            data=login_request_body,
         )
 
         assert response.status_code == 200

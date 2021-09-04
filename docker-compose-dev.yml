@@ -18,3 +18,5 @@ services:
       - DB_USER
       - DB_PASSWORD
       - DB_NAME
+      - SPOTIFY_CLIENT_ID
+      - SPOTIFY_CLIENT_SECRET

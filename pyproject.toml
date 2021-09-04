@@ -16,6 +16,9 @@ python-jose = "^3.3.0"
 passlib = "^1.7.4"
 bcrypt = "^3.2.0"
 python-multipart = "^0.0.5"
+spotipy = "^2.19.0"
+emoji = "^1.4.2"
+pytest-lazy-fixture = "^0.6.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"

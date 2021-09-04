@@ -1,11 +1,12 @@
-from typing import Generator
+from typing import Callable, Dict, Generator
 
 import pytest
 from sqlalchemy.orm import Session
 from starlette.testclient import TestClient
 
-from zephyr.app import crud
+from zephyr.app import crud, models
 from zephyr.app.core.config import Settings, get_settings
+from zephyr.app.core.security import create_access_token
 from zephyr.app.db.base import Base
 from zephyr.app.db.session import SessionLocal, engine
 from zephyr.app.main import app
@@ -39,14 +40,22 @@ def test_app() -> Generator:
         yield test_client
 
 
+TEST_USERNAME = "zephyr"
+TEST_PASSWORD = "zephyr"
+
+
 @pytest.fixture(scope="session")
-def test_user_raw_password(db: Session) -> str:
-    return "zephyr"
+def test_user(db: Session) -> Generator:
+    user_in = UserCreate(username=TEST_USERNAME, password=TEST_PASSWORD)
+    user = crud.user.create(db, obj_in=user_in)
+    yield user
 
 
 @pytest.fixture(scope="class")
-def test_user(db: Session, test_user_raw_password: str) -> Generator:
-    user_in = UserCreate(username="zephyr", password=test_user_raw_password)
-    user = crud.user.create(db=db, obj_in=user_in)
-    yield user
-    db.delete(user)
+def auth_token_headers(test_app: TestClient, db: Session) -> Callable:
+    def _auth_token_headers(user: models.User) -> Dict[str, str]:
+        token = create_access_token(user.id)
+        headers = {"Authorization": f"Bearer {token}"}
+        return headers
+
+    return _auth_token_headers

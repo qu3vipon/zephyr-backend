@@ -12,7 +12,7 @@ from zephyr.app.core.config import settings
 from zephyr.app.db.session import SessionLocal
 
 reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_PREFIX}/auth/access-token"
+    tokenUrl=f"{settings.API_V1_PREFIX}/auth/login/access-token"
 )
 
 

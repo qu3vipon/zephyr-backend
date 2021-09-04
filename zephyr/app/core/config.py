@@ -27,6 +27,8 @@ class Settings(BaseSettings):
     DB_USER: str = os.getenv("DB_USER", "zephyr")
     ENVIRONMENT: str = os.getenv("ENV", "dev")
     SECRET_KEY: str = os.getenv("SECRET_KEY", "zephyr")
+    SPOTIFY_CLIENT_ID: str = os.getenv("SPOTIFY_CLIENT_ID", "zephyr")
+    SPOTIFY_CLIENT_SECRET: str = os.getenv("SPOTIFY_CLIENT_SECRET", "zephyr")
     TESTING: bool = os.getenv("TESTING", 0)
 
 

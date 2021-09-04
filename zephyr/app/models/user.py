@@ -3,6 +3,7 @@ import uuid
 
 from sqlalchemy import Boolean, Column, DateTime, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 from zephyr.app.db.base import Base
 
@@ -18,3 +19,5 @@ class User(Base):
     is_superuser = Column(Boolean, default=False)
     registered_at = Column(DateTime, default=datetime.datetime.now)
     unregistered_at = Column(DateTime, nullable=True)
+
+    posts = relationship("Post", back_populates="user")
