@@ -1,6 +1,14 @@
 # Zephyr
 
-Social Music Application built with FastAPI
+(WIP) Social Music Application built with FastAPI.
+
+## Focus on Implementation
+
+- Well-structured Project
+- High Performance: Caching & Asynchronous I/O
+- TDD: Test Driven Development
+- Dockerized Environment
+- CI/CD: Process Automation
 
 ## Requirements
 
@@ -11,7 +19,9 @@ Social Music Application built with FastAPI
 
 <hr>
 
-## Boilterplate
+## Boilerplate
+
+If you need boilerplate settings to launch your project, clone v1.0.0.
 
 ```shell
 git clone https://github.com/qu3vipon/zephyr-backend.git
@@ -52,6 +62,8 @@ docker-compose -f docker-compose-test.yml up --build --exit-code-from test_app
 
 ### Update new models
 
+When you create a new model, upload two files below to use it in your project.
+
 ```python
 # zephyr/app/models/__init__.py 
 #  -> to shorten import path
@@ -59,8 +71,14 @@ docker-compose -f docker-compose-test.yml up --build --exit-code-from test_app
 #  -> used by Alembic to generate revision script
 ```
 
-### Populate revision script by Alembic
+### Populate migration script by Alembic
 
 ```shell
-alembic revision --autogenerate -m "revision message"
+alembic revision --autogenerate -m "<revision message>"
+```
+
+### Run migration to head
+
+```shell
+alembic upgrade head
 ```

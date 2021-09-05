@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from emoji.unicode_codes.en import EMOJI_UNICODE_ENGLISH
 from pydantic import BaseModel, validator
 
@@ -13,6 +15,7 @@ class Post(BaseModel):
     emoji: str
     user_id: int
     track_id: int
+    created_at: datetime
 
     class Config:
         orm_mode = True
@@ -20,10 +23,10 @@ class Post(BaseModel):
     @validator("emoji")
     def check_emoji(cls, emoji):
         if len(emoji) > 1:
-            raise ValueError("One emoji is allowed")
+            raise ValueError("Multiple emojis are not allowed.")
 
         if emoji not in EMOJI_UNICODE_ENGLISH.values():
-            raise ValueError("Invalid emoji")
+            raise ValueError("Invalid emoji.")
         return emoji
 
 

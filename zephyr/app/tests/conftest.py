@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from starlette.testclient import TestClient
 
 from zephyr.app import crud, models
-from zephyr.app.core.config import Settings, get_settings
+from zephyr.app.core.config import Settings, get_settings, settings
 from zephyr.app.core.security import create_access_token
 from zephyr.app.db.base import Base
 from zephyr.app.db.session import SessionLocal, engine
@@ -40,18 +40,17 @@ def test_app() -> Generator:
         yield test_client
 
 
-TEST_USERNAME = "zephyr"
-TEST_PASSWORD = "zephyr"
+@pytest.fixture(scope="session")
+def test_user(db: Session) -> Generator:
+    user_in = UserCreate(
+        username=settings.TEST_USERNAME, password=settings.TEST_PASSWORD
+    )
+    user = crud.user.create(db, obj_in=user_in)
+    yield user
+    db.delete(user)
 
 
 @pytest.fixture(scope="session")
-def test_user(db: Session) -> Generator:
-    user_in = UserCreate(username=TEST_USERNAME, password=TEST_PASSWORD)
-    user = crud.user.create(db, obj_in=user_in)
-    yield user
-
-
-@pytest.fixture(scope="class")
 def auth_token_headers(test_app: TestClient, db: Session) -> Callable:
     def _auth_token_headers(user: models.User) -> Dict[str, str]:
         token = create_access_token(user.id)

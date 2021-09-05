@@ -1,8 +1,8 @@
 """add new models: Post, Track
 
-Revision ID: 25be385013d4
+Revision ID: b8b002459e2f
 Revises: 35db080db013
-Create Date: 2021-09-04 12:48:46.534582
+Create Date: 2021-09-05 14:17:45.557892
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '25be385013d4'
+revision = 'b8b002459e2f'
 down_revision = '35db080db013'
 branch_labels = None
 depends_on = None
@@ -34,6 +34,7 @@ def upgrade():
     sa.Column('emoji', sa.String(length=4), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('track_id', sa.Integer(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['track_id'], ['tracks.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')

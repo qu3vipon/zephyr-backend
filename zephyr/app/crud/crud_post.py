@@ -3,10 +3,10 @@ from typing import Optional
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
+from zephyr.app.core.spotify import search_track_by_uri
 from zephyr.app.crud.base import CRUDBase
 from zephyr.app.models import Post, Track
 from zephyr.app.schemas.post import PostCreate, TrackCreate
-from zephyr.app.utils.spotify import search_track_by_uri
 
 
 class CRUDPost(CRUDBase[Post, PostCreate, None]):

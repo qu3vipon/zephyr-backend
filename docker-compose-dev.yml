@@ -20,3 +20,10 @@ services:
       - DB_NAME
       - SPOTIFY_CLIENT_ID
       - SPOTIFY_CLIENT_SECRET
+    depends_on:
+      - redis
+  redis:
+    image: redis:6.2
+    expose:
+      - "6379"
+    restart: always

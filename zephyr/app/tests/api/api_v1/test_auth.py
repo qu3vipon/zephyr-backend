@@ -1,5 +1,7 @@
 from schema import Or, Schema
+from starlette.testclient import TestClient
 
+from zephyr.app import models
 from zephyr.app.core import security
 from zephyr.app.core.config import settings
 
@@ -8,11 +10,11 @@ URL_PREFIX = settings.API_V1_PREFIX
 
 class TestUserAuthentication:
     new_user_body = {
-        "username": "zephyr_auth",
-        "password": "zephyr_auth",
+        "username": "zephyr2",
+        "password": "zephyr2",
     }
 
-    def test_sign_up(self, test_app):
+    def test_sign_up(self, test_app: TestClient):
         response = test_app.post(
             f"{URL_PREFIX}/auth/sign-up",
             json=self.new_user_body,
@@ -34,7 +36,7 @@ class TestUserAuthentication:
         assert response.status_code == 201
         assert schema.is_valid(response.json())
 
-    def test_login_access_token(self, test_app):
+    def test_login_access_token(self, test_app: TestClient):
         response = test_app.post(
             f"{URL_PREFIX}/auth/login/access-token",
             data=self.new_user_body,
@@ -49,11 +51,13 @@ class TestUserAuthentication:
         assert response.status_code == 200
         assert schema.is_valid(response.json())
 
-    def test_reset_password(self, test_app, test_user):
+    def test_reset_password(self, test_app: TestClient, test_user: models.User):
         access_token = security.create_access_token(test_user.id)
+        new_password = "new_password"
+
         reset_body = {
             "access_token": access_token,
-            "new_password": "new_password",
+            "new_password": new_password,
         }
         response = test_app.post(f"{URL_PREFIX}/auth/reset-password", json=reset_body)
 
@@ -62,7 +66,7 @@ class TestUserAuthentication:
 
         login_request_body = {
             "username": test_user.username,
-            "password": reset_body["new_password"],
+            "password": new_password,
         }
         response = test_app.post(
             f"{URL_PREFIX}/auth/login/access-token",

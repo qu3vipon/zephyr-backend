@@ -13,12 +13,12 @@ spotify = spotipy.Spotify(
 )
 
 
-def query_tracks(query: str, limit: int = 1) -> list:
+def query_tracks(query: str, limit: int = 10) -> list:
     parsed_results = list()
     results: dict = spotify.search(q=query, limit=limit)
     for track in results["tracks"]["items"]:
         artists = list()
-        for artist in results["artists"]:
+        for artist in track["artists"]:
             artists.append(artist["name"])
 
         parsed_results.append(

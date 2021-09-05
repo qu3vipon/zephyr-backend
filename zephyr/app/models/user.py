@@ -1,5 +1,5 @@
-import datetime
 import uuid
+from datetime import datetime
 
 from sqlalchemy import Boolean, Column, DateTime, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
@@ -17,7 +17,7 @@ class User(Base):
     password_hash = Column(String(64))
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
-    registered_at = Column(DateTime, default=datetime.datetime.now)
+    registered_at = Column(DateTime, default=datetime.now)
     unregistered_at = Column(DateTime, nullable=True)
 
     posts = relationship("Post", back_populates="user")
