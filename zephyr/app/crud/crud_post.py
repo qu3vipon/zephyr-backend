@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
+from zephyr.app import models
 from zephyr.app.core.spotify import search_track_by_uri
 from zephyr.app.crud.base import CRUDBase
 from zephyr.app.models import Post, Track
@@ -10,7 +11,13 @@ from zephyr.app.schemas.post import PostCreate, TrackCreate
 
 
 class CRUDPost(CRUDBase[Post, PostCreate, None]):
-    pass
+    def get_last(self, db: Session, user: models.User) -> Optional[Post]:
+        return (
+            db.query(self.model)
+            .filter(self.model.user == user)
+            .order_by(self.model.id.desc())
+            .first()
+        )
 
 
 class CRUDTrack(CRUDBase[Track, TrackCreate, None]):

@@ -13,7 +13,7 @@ router = APIRouter()
 log = logging.getLogger("uvicorn")
 
 
-@router.post("/tracks")
+@router.get("/tracks")
 def search_tracks(
     *,
     _=Depends(deps.get_current_user),

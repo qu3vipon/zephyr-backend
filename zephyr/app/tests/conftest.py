@@ -51,10 +51,15 @@ def test_user(db: Session) -> Generator:
 
 
 @pytest.fixture(scope="session")
-def auth_token_headers(test_app: TestClient, db: Session) -> Callable:
-    def _auth_token_headers(user: models.User) -> Dict[str, str]:
+def auth_token_header(test_app: TestClient, db: Session) -> Callable:
+    def _auth_token_header(user: models.User) -> Dict[str, str]:
         token = create_access_token(user.id)
         headers = {"Authorization": f"Bearer {token}"}
         return headers
 
-    return _auth_token_headers
+    return _auth_token_header
+
+
+@pytest.fixture(scope="session")
+def timezone_header() -> Dict[str, str]:
+    return {"X-Timezone": "Asia/Seoul"}

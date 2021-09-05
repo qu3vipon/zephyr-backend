@@ -13,7 +13,7 @@ class Post(Base):
     emoji = Column(String(4), unique=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     track_id = Column(Integer, ForeignKey("tracks.id"))
-    created_at = Column(DateTime, default=datetime.now)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="posts")
     track = relationship("Track", back_populates="posts")

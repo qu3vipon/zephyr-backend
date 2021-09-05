@@ -17,7 +17,7 @@ class User(Base):
     password_hash = Column(String(64))
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
-    registered_at = Column(DateTime, default=datetime.now)
+    registered_at = Column(DateTime, default=datetime.utcnow)
     unregistered_at = Column(DateTime, nullable=True)
 
     posts = relationship("Post", back_populates="user")

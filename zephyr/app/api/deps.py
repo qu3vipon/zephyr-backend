@@ -1,10 +1,12 @@
-from typing import Generator
+from typing import Generator, Optional
 
+import pytz
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
+from starlette.requests import Request
 
 from zephyr.app import crud, models, schemas
 from zephyr.app.core import security
@@ -49,3 +51,19 @@ def get_current_active_user(
     if not crud.user.is_active(current_user):
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+
+def get_timezone(request: Request) -> pytz.timezone:
+    timezone_name: Optional[str] = request.headers.get("X-Timezone")
+
+    if timezone_name is None:
+        raise HTTPException(status_code=400, detail="X-Timezone header is required.")
+
+    if timezone_name not in pytz.all_timezones:
+        raise ValidationError("Invalid timezone.")
+    try:
+        timezone = pytz.timezone(timezone_name)
+    except pytz.exceptions.UnknownTimeZoneError:
+        raise ValidationError("Invalid timezone.")
+
+    return timezone

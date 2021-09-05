@@ -1,5 +1,5 @@
 # pull official base image
-FROM python:3.8.7-slim-buster
+FROM python:3.8.7-slim
 
 # set working directory
 RUN mkdir -p /usr/src/app
@@ -17,6 +17,7 @@ RUN apt-get -y update \
 
 # install python dependencies
 RUN pip install --upgrade pip
+RUN pip install pytz
 RUN pip install "poetry==$POETRY_VERSION"
 
 COPY poetry.lock pyproject.toml ./
