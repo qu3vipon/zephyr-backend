@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -13,10 +13,12 @@ spotify = spotipy.Spotify(
 )
 
 
-def query_tracks(query: str, limit: int = 10) -> list:
+def query_tracks(query: str, page: int, limit: int = 10) -> List:
+    results: dict = spotify.search(q=query, offset=page * limit, limit=limit)
+    tracks: dict = results["tracks"]
+
     parsed_results = list()
-    results: dict = spotify.search(q=query, limit=limit)
-    for track in results["tracks"]["items"]:
+    for track in tracks["items"]:
         artists = list()
         for artist in track["artists"]:
             artists.append(artist["name"])
