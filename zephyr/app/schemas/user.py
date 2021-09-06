@@ -21,7 +21,7 @@ class UserUpdate(UserBase):
     password: Optional[str] = None
 
 
-class UserInDBBase(BaseModel):
+class UserDBBase(BaseModel):
     id: Optional[int] = None
     uuid: UUID
     username: str
@@ -33,5 +33,5 @@ class UserInDBBase(BaseModel):
 
 
 # Additional properties to return via API
-class UserOut(UserInDBBase):
+class UserOut(UserDBBase):
     access_token: str

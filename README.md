@@ -2,10 +2,11 @@
 
 (WIP) Social Music Application built with FastAPI.
 
+<hr>
+
 ## Focus on Implementation
 
 - Well-structured Project
-- High Performance: Caching & Asynchronous I/O
 - TDD: Test Driven Development
 - Dockerized Environment
 - CI/CD: Process Automation
@@ -16,8 +17,6 @@
 - Docker
 - Docker Compose
 - Poetry
-
-<hr>
 
 ## Boilerplate
 

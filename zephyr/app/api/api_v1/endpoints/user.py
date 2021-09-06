@@ -10,7 +10,7 @@ from zephyr.app.api import deps
 router = APIRouter()
 
 
-@router.post("/me/posts", status_code=201, response_model=schemas.Post)
+@router.post("/me/posts", status_code=201, response_model=schemas.PostOut)
 def create_post(
     db: Session = Depends(deps.get_db),
     user: models.User = Depends(deps.get_current_user),
@@ -21,7 +21,6 @@ def create_post(
     """
     Create new post
     """
-
     last_post = crud.post.get_last(db, user)
     if last_post:
         last_upload = last_post.created_at

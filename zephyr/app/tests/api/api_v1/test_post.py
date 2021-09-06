@@ -61,12 +61,7 @@ class TestUserPosts:
         test_app: TestClient,
         emoji: str,
         error_message: str,
-        db: Session,
     ):
-        last_post = crud.post.get_last(db, user=test_user)
-        if last_post:
-            crud.post.remove(db, id=last_post.id)
-
         with pytest.raises(ValueError) as excinfo:
             headers = auth_token_header(test_user)
             headers.update(timezone_header)
@@ -86,10 +81,6 @@ class TestUserPosts:
         test_app: TestClient,
         db: Session,
     ):
-        last_post = crud.post.get_last(db, user=test_user)
-        if last_post:
-            crud.post.remove(db, id=last_post.id)
-
         headers = auth_token_header(test_user)
         headers.update(timezone_header)
         response = test_app.post(
